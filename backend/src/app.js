@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const userOrdersRouter = require('./routes/user/orders');
+const adminRouter = require('./routes/admin');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -13,6 +14,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api/v1/user/orders', userOrdersRouter);
+app.use('/api/v1/admin', adminRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });

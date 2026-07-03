@@ -54,4 +54,39 @@ function formatOrderDetail(order, statusHistory) {
   return detail;
 }
 
-module.exports = { formatOrderListItem, formatOrderDetail, isActiveOtp };
+function formatAdminListItem(order) {
+  return {
+    orderId: order.orderId,
+    customerName: order.customerName,
+    phone: order.phone,
+    productName: order.productName,
+    amount: order.amount,
+    paymentStatus: order.paymentStatus,
+    orderStatus: order.orderStatus,
+    providerId: order.providerId,
+    providerName: order.providerName,
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt,
+  };
+}
+
+function formatAdminDetail(order, statusHistory) {
+  return {
+    ...formatAdminListItem(order),
+    statusHistory: statusHistory.map((entry) => ({
+      fromStatus: entry.fromStatus,
+      toStatus: entry.toStatus,
+      changedAt: entry.createdAt,
+      changedBy: entry.changedBy,
+      note: entry.note,
+    })),
+  };
+}
+
+module.exports = {
+  formatOrderListItem,
+  formatOrderDetail,
+  formatAdminListItem,
+  formatAdminDetail,
+  isActiveOtp,
+};
