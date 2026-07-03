@@ -1,6 +1,7 @@
 const Order = require('../../models/Order');
 const StatusHistory = require('../../models/StatusHistory');
 const SchedulerLog = require('../../models/SchedulerLog');
+const { runScheduler } = require('../../services/schedulerService');
 const { ORDER_STATUSES, PAYMENT_STATUSES } = require('../../constants');
 const { formatAdminListItem, formatAdminDetail } = require('../../utils/formatOrder');
 
@@ -249,6 +250,27 @@ async function updateOrderStatus(req, res, next) {
   }
 }
 
+async function triggerScheduler(req, res, next) {
+  try {
+    const result = await runScheduler({ triggeredBy: 'MANUAL' });
+
+    if (result.skipped) {
+      return res.json({ success: true, message: result.message, data: result });
+    }
+
+    res.json({
+      success: true,
+      message: `Scheduler ran — ${result.ordersUpdated} order(s) updated`,
+      data: result,
+    });
+  } catch (err) {
+    if (err.statusCode === 409) {
+      return res.status(409).json({ success: false, message: err.message });
+    }
+    next(err);
+  }
+}
+
 module.exports = {
   listOrders,
   getOrderDetail,
@@ -256,4 +278,5 @@ module.exports = {
   getSchedulerLogs,
   getOrderHistory,
   updateOrderStatus,
+  triggerScheduler,
 };
