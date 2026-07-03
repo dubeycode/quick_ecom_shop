@@ -1,11 +1,17 @@
 import { getAdminKey } from '../utils/adminSession';
+import { getProviderToken } from '../utils/providerSession';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
 async function request(path, options = {}) {
+  const { headers: customHeaders = {}, ...rest } = options;
+
   const res = await fetch(`${API_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
+    ...rest,
+    headers: {
+      'Content-Type': 'application/json',
+      ...customHeaders,
+    },
   });
 
   const data = await res.json().catch(() => ({}));
@@ -88,5 +94,56 @@ export function adminUpdateOrderStatus(orderId, body) {
     method: 'PATCH',
     headers: adminHeaders(),
     body: JSON.stringify(body),
+  });
+}
+
+export function adminListProviders() {
+  return request('/admin/providers', { headers: adminHeaders() });
+}
+
+export function adminCreateProvider(body) {
+  return request('/admin/providers', {
+    method: 'POST',
+    headers: adminHeaders(),
+    body: JSON.stringify(body),
+  });
+}
+
+export function adminAssignOrder(orderId, providerId) {
+  return request(`/admin/orders/${orderId}/assign`, {
+    method: 'POST',
+    headers: adminHeaders(),
+    body: JSON.stringify({ providerId }),
+  });
+}
+
+function providerHeaders() {
+  return { Authorization: `Bearer ${getProviderToken()}` };
+}
+
+export function providerLogin(phone, password) {
+  return request('/provider/login', {
+    method: 'POST',
+    body: JSON.stringify({ phone, password }),
+  });
+}
+
+export function providerListMyOrders(page = 1, limit = 20) {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  return request(`/provider/orders/my?${params}`, { headers: providerHeaders() });
+}
+
+export function providerSendOtp(orderId) {
+  return request(`/provider/orders/${orderId}/send-otp`, {
+    method: 'POST',
+    headers: providerHeaders(),
+  });
+}
+
+export function providerVerifyOtp(orderId, otp) {
+  return request(`/provider/orders/${orderId}/verify-otp`, {
+    method: 'POST',
+    headers: providerHeaders(),
+    body: JSON.stringify({ otp }),
   });
 }

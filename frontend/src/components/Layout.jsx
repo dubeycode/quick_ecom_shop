@@ -7,6 +7,7 @@ export default function Layout({ children }) {
   const links = [
     { to: '/', label: 'Shop' },
     { to: '/orders', label: 'My Orders' },
+    { to: '/provider', label: 'Provider' },
     { to: '/admin', label: 'Admin' },
   ];
 

@@ -5,6 +5,9 @@ import {
   adminGetSchedulerLogs,
   adminGetStats,
   adminListOrders,
+  adminListProviders,
+  adminCreateProvider,
+  adminAssignOrder,
   adminTriggerScheduler,
   adminUpdateOrderStatus,
 } from '../api/client';
@@ -50,6 +53,12 @@ export default function AdminDashboard() {
   const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [providers, setProviders] = useState([]);
+  const [providersLoading, setProvidersLoading] = useState(false);
+  const [assignProviderId, setAssignProviderId] = useState('');
+  const [assigning, setAssigning] = useState(false);
+  const [newProvider, setNewProvider] = useState({ name: '', phone: '', password: '' });
+  const [creatingProvider, setCreatingProvider] = useState(false);
 
   const fetchStats = useCallback(async () => {
     const res = await adminGetStats();
@@ -87,6 +96,20 @@ export default function AdminDashboard() {
     }
   }, []);
 
+  const fetchProviders = useCallback(async () => {
+    setProvidersLoading(true);
+    setError('');
+    try {
+      const res = await adminListProviders();
+      setProviders(res.data.providers);
+    } catch (err) {
+      setError(err.message);
+      setProviders([]);
+    } finally {
+      setProvidersLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -114,13 +137,57 @@ export default function AdminDashboard() {
   async function openOrderDetail(orderId) {
     setDetailLoading(true);
     setSelectedOrder(null);
+    setAssignProviderId('');
     try {
+      if (providers.length === 0) {
+        const provRes = await adminListProviders();
+        setProviders(provRes.data.providers);
+      }
       const res = await adminGetOrder(orderId);
       setSelectedOrder(res.data);
+      if (res.data.providerId) setAssignProviderId(res.data.providerId);
     } catch (err) {
       setError(err.message);
     } finally {
       setDetailLoading(false);
+    }
+  }
+
+  async function handleAssignOrder() {
+    if (!assignProviderId || !selectedOrder) return;
+    setAssigning(true);
+    setError('');
+    try {
+      await adminAssignOrder(selectedOrder.orderId, assignProviderId);
+      const res = await adminGetOrder(selectedOrder.orderId);
+      setSelectedOrder(res.data);
+      fetchOrders();
+    } catch (err) {
+      const details = err.errors?.map((e) => e.message).join(', ');
+      setError(details ? `${err.message}: ${details}` : err.message);
+    } finally {
+      setAssigning(false);
+    }
+  }
+
+  async function handleCreateProvider(e) {
+    e.preventDefault();
+    setCreatingProvider(true);
+    setError('');
+    try {
+      const payload = {
+        name: newProvider.name.trim(),
+        phone: newProvider.phone.replace(/\D/g, ''),
+        password: newProvider.password,
+      };
+      await adminCreateProvider(payload);
+      setNewProvider({ name: '', phone: '', password: '' });
+      await fetchProviders();
+    } catch (err) {
+      const details = err.errors?.map((e) => e.message).join(', ');
+      setError(details ? `${err.message}: ${details}` : err.message);
+    } finally {
+      setCreatingProvider(false);
     }
   }
 
@@ -166,6 +233,7 @@ export default function AdminDashboard() {
     setTab(nextTab);
     setError('');
     if (nextTab === 'logs' && logs.length === 0) fetchLogs();
+    if (nextTab === 'providers' && providers.length === 0) fetchProviders();
   }
 
   return (
@@ -201,6 +269,13 @@ export default function AdminDashboard() {
           onClick={() => switchTab('orders')}
         >
           Orders
+        </button>
+        <button
+          type="button"
+          className={tab === 'providers' ? 'admin-tab active' : 'admin-tab'}
+          onClick={() => switchTab('providers')}
+        >
+          Providers
         </button>
         <button
           type="button"
@@ -276,6 +351,7 @@ export default function AdminDashboard() {
                     <th>Amount</th>
                     <th>Status</th>
                     <th>Payment</th>
+                    <th>Provider</th>
                     <th>Created</th>
                   </tr>
                 </thead>
@@ -289,6 +365,7 @@ export default function AdminDashboard() {
                       <td>₹{order.amount.toLocaleString()}</td>
                       <td><StatusBadge status={order.orderStatus} /></td>
                       <td>{order.paymentStatus}</td>
+                      <td>{order.providerName || '—'}</td>
                       <td>{formatDate(order.createdAt)}</td>
                     </tr>
                   ))}
@@ -318,6 +395,85 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               )}
+            </div>
+          )}
+        </>
+      )}
+
+      {tab === 'providers' && (
+        <>
+          <form onSubmit={handleCreateProvider} className="card" style={{ marginBottom: '1.5rem' }}>
+            <h2 className="section-title">Create Provider</h2>
+            <div className="admin-filters-row">
+              <div className="form-group">
+                <label htmlFor="provName">Name</label>
+                <input
+                  id="provName"
+                  value={newProvider.name}
+                  onChange={(e) => setNewProvider((p) => ({ ...p, name: e.target.value }))}
+                  placeholder="Delivery Partner 1"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="provPhone">Phone (login)</label>
+                <input
+                  id="provPhone"
+                  value={newProvider.phone}
+                  onChange={(e) =>
+                    setNewProvider((p) => ({ ...p, phone: e.target.value.replace(/\D/g, '').slice(0, 10) }))
+                  }
+                  placeholder="1234567890"
+                  maxLength={10}
+                  inputMode="numeric"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="provPass">Password</label>
+                <input
+                  id="provPass"
+                  type="password"
+                  value={newProvider.password}
+                  onChange={(e) => setNewProvider((p) => ({ ...p, password: e.target.value }))}
+                  placeholder="Min 4 characters"
+                  minLength={4}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary" disabled={creatingProvider}>
+                {creatingProvider ? 'Creating...' : 'Add Provider'}
+              </button>
+            </div>
+          </form>
+
+          {providersLoading && <div className="empty-state card">Loading providers...</div>}
+
+          {!providersLoading && providers.length === 0 && (
+            <div className="empty-state card">No providers yet. Create one above.</div>
+          )}
+
+          {!providersLoading && providers.length > 0 && (
+            <div className="card admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {providers.map((p) => (
+                    <tr key={p.providerId}>
+                      <td>{p.providerId}</td>
+                      <td>{p.name}</td>
+                      <td>{p.phone}</td>
+                      <td>{p.isActive ? 'Active' : 'Inactive'}</td>
+                      <td>{formatDate(p.createdAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </>
@@ -433,6 +589,35 @@ export default function AdminDashboard() {
                     </li>
                   ))}
                 </ul>
+
+                {selectedOrder.orderStatus === 'READY_TO_SHIP' && (
+                  <div className="form-group" style={{ marginTop: '1rem' }}>
+                    <label htmlFor="assignProvider">Assign Provider</label>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <select
+                        id="assignProvider"
+                        value={assignProviderId}
+                        onChange={(e) => setAssignProviderId(e.target.value)}
+                        style={{ flex: 1, minWidth: '200px' }}
+                      >
+                        <option value="">Select provider</option>
+                        {providers.map((p) => (
+                          <option key={p.providerId} value={p.providerId}>
+                            {p.name} ({p.phone})
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        disabled={!assignProviderId || assigning}
+                        onClick={handleAssignOrder}
+                      >
+                        {assigning ? 'Assigning...' : 'Assign'}
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {selectedOrder.orderStatus !== 'CANCELLED' && selectedOrder.orderStatus !== 'COMPLETED' && (
                   <div className="modal-actions">
