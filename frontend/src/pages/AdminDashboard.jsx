@@ -5,6 +5,7 @@ import {
   adminGetSchedulerLogs,
   adminGetStats,
   adminListOrders,
+  adminTriggerScheduler,
   adminUpdateOrderStatus,
 } from '../api/client';
 import StatusBadge from '../components/StatusBadge';
@@ -45,6 +46,7 @@ export default function AdminDashboard() {
   const [filters, setFilters] = useState({ status: '', paymentStatus: '', search: '', page: 1, limit: 20 });
   const [loading, setLoading] = useState(true);
   const [logsLoading, setLogsLoading] = useState(false);
+  const [schedulerRunning, setSchedulerRunning] = useState(false);
   const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -136,6 +138,22 @@ export default function AdminDashboard() {
     } catch (err) {
       const detail = err.errors?.[0]?.message;
       setError(detail ? `${err.message}: ${detail}` : err.message);
+    }
+  }
+
+  async function handleRunScheduler() {
+    setSchedulerRunning(true);
+    setError('');
+    try {
+      const res = await adminTriggerScheduler();
+      await fetchLogs();
+      await fetchOrders();
+      setError('');
+      alert(res.message || 'Scheduler completed');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSchedulerRunning(false);
     }
   }
 
@@ -307,6 +325,17 @@ export default function AdminDashboard() {
 
       {tab === 'logs' && (
         <>
+          <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleRunScheduler}
+              disabled={schedulerRunning}
+            >
+              {schedulerRunning ? 'Running...' : 'Run Scheduler Now'}
+            </button>
+          </div>
+
           {logsLoading && <div className="empty-state card">Loading scheduler logs...</div>}
 
           {!logsLoading && logs.length === 0 && (

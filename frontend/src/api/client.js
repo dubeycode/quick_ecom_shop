@@ -67,6 +67,13 @@ export function adminGetStats() {
   return request('/admin/stats', { headers: adminHeaders() });
 }
 
+export function adminTriggerScheduler() {
+  return request('/admin/scheduler/run', {
+    method: 'POST',
+    headers: adminHeaders(),
+  });
+}
+
 export function adminGetSchedulerLogs(page = 1, limit = 20) {
   const params = new URLSearchParams({ page: String(page), limit: String(limit) });
   return request(`/admin/scheduler-logs?${params}`, { headers: adminHeaders() });

@@ -22,8 +22,8 @@ Requests without a valid secret receive `401 Unauthorized`.
 
 | Current Status | Elapsed Time | New Status |
 |----------------|--------------|------------|
-| `PLACED` | > 10 minutes since last update | `PROCESSING` |
-| `PROCESSING` | > 20 minutes since last update | `READY_TO_SHIP` |
+| `PLACED` | > 5 minutes since created | `PROCESSING` |
+| `PROCESSING` | > 5 minutes since last update | `READY_TO_SHIP` |
 
 Thresholds are configurable via environment variables.
 
@@ -132,52 +132,64 @@ Body (optional):
 
 ---
 
-## Deployment Options
+## Deployment — Vercel Cron
 
-### GitHub Actions
+The scheduler runs automatically via **Vercel Cron** every 5 minutes.
 
-File: `.github/workflows/scheduler.yml`
+### Setup
 
-```yaml
-name: Order Status Scheduler
+1. Deploy the `backend` folder to Vercel
+2. Add environment variables in Vercel dashboard:
+   - `MONGODB_URI`
+   - `SCHEDULER_SECRET_KEY`
+   - `CRON_SECRET` (same value as `SCHEDULER_SECRET_KEY` — Vercel sends this as `Authorization: Bearer`)
+   - `PLACED_TO_PROCESSING_MINUTES=5`
+   - `PROCESSING_TO_READY_MINUTES=5`
+   - `SCHEDULER_ENABLED=true`
 
-on:
-  schedule:
-    - cron: '*/5 * * * *'
-  workflow_dispatch:
+3. Cron is configured in `backend/vercel.json`:
 
-jobs:
-  run-scheduler:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Scheduler API
-        run: |
-          curl -X POST ${{ secrets.API_URL }}/api/v1/scheduler/run \
-            -H "x-scheduler-secret: ${{ secrets.SCHEDULER_SECRET }}"
+```json
+{
+  "crons": [
+    {
+      "path": "/api/cron/scheduler",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}
 ```
 
-Required secrets: `API_URL`, `SCHEDULER_SECRET`
+4. Serverless handler: `backend/api/cron/scheduler.js`
+
+Vercel automatically invokes `/api/cron/scheduler` on schedule.
 
 ---
 
-### Render Cron Job
+## Manual Trigger (local / testing)
 
+### Express endpoint (local dev)
+
+```bash
+curl -X POST http://localhost:5000/api/v1/scheduler/run \
+  -H "Content-Type: application/json" \
+  -H "x-scheduler-secret: <SCHEDULER_SECRET_KEY>"
 ```
-Schedule: */5 * * * *
-Command: curl -X POST https://api.example.com/api/v1/scheduler/run -H "x-scheduler-secret: $SCHEDULER_SECRET"
+
+### Vercel cron endpoint (after deploy)
+
+```bash
+curl -X GET https://your-backend.vercel.app/api/cron/scheduler \
+  -H "Authorization: Bearer <CRON_SECRET>"
 ```
 
 ---
 
-### Local / Development
-
-Linux crontab or Windows Task Scheduler:
+## Local Development
 
 ```bash
 */5 * * * * curl -X POST http://localhost:5000/api/v1/scheduler/run -H "x-scheduler-secret: <SCHEDULER_SECRET_KEY>"
 ```
-
-For local development, the endpoint can also be triggered manually via cURL or Postman.
 
 ---
 
@@ -197,7 +209,8 @@ See [05-database-design.md](./05-database-design.md) for schema details.
 
 ```env
 SCHEDULER_SECRET_KEY=<your_scheduler_secret_key>
-PLACED_TO_PROCESSING_MINUTES=10
-PROCESSING_TO_READY_MINUTES=20
+CRON_SECRET=<same_as_scheduler_secret>
+PLACED_TO_PROCESSING_MINUTES=5
+PROCESSING_TO_READY_MINUTES=5
 SCHEDULER_ENABLED=true
 ```

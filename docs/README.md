@@ -39,7 +39,7 @@ Provider App  ──┘         ▲
 
 ```
 PLACED → PROCESSING → READY_TO_SHIP → OUT_FOR_DELIVERY → COMPLETED
-         (10 min)        (20 min)         (provider)         (OTP verified)
+         (5 min)         (5 min)          (provider)         (OTP verified)
 ```
 
 Automated transitions (`PLACED → PROCESSING → READY_TO_SHIP`) are handled by the scheduler. Provider actions drive the final two stages.
