@@ -7,6 +7,7 @@ export default function Layout({ children }) {
   const links = [
     { to: '/', label: 'Shop' },
     { to: '/orders', label: 'My Orders' },
+    { to: '/admin', label: 'Admin' },
   ];
 
   return (
@@ -21,7 +22,11 @@ export default function Layout({ children }) {
               <Link
                 key={link.to}
                 to={link.to}
-                className={pathname === link.to ? 'nav-link active' : 'nav-link'}
+                className={
+                  pathname === link.to || (link.to === '/admin' && pathname.startsWith('/admin'))
+                    ? 'nav-link active'
+                    : 'nav-link'
+                }
               >
                 {link.label}
               </Link>
