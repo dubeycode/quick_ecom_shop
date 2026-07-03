@@ -1,0 +1,18 @@
+const ORDER_STATUSES = [
+  'PLACED',
+  'PROCESSING',
+  'READY_TO_SHIP',
+  'OUT_FOR_DELIVERY',
+  'COMPLETED',
+  'CANCELLED',
+];
+
+const PAYMENT_STATUSES = ['COD', 'PAID'];
+
+const CHANGED_BY = ['SYSTEM', 'SCHEDULER', 'PROVIDER', 'ADMIN'];
+
+module.exports = {
+  ORDER_STATUSES,
+  PAYMENT_STATUSES,
+  CHANGED_BY,
+};

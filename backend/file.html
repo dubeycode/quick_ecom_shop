@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Directory | RehabOS Clinical ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d8dadc",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container-low": "#f2f4f6",
+                    "on-surface": "#191c1e",
+                    "on-secondary-container": "#54647a",
+                    "outline": "#737784",
+                    "tertiary-container": "#993900",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "critical-alert": "#EF4444",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#00419c",
+                    "surface-container": "#eceef0",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-variant": "#e0e3e5",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-fixed": "#360f00",
+                    "primary": "#003c90",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#001945",
+                    "success-recovery": "#10B981",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-background": "#191c1e",
+                    "surface-bright": "#f7f9fb",
+                    "surface-tint": "#1d59c1",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "primary-fixed": "#d9e2ff",
+                    "surface": "#f7f9fb",
+                    "tertiary-fixed": "#ffdbcd",
+                    "background": "#f7f9fb",
+                    "patient-info": "#0EA5E9",
+                    "surface-container-highest": "#e0e3e5",
+                    "tertiary": "#732900",
+                    "on-surface-variant": "#434653",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "secondary-container": "#d0e1fb",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-tertiary-container": "#ffc0a7",
+                    "primary-fixed-dim": "#b0c6ff",
+                    "on-error": "#ffffff",
+                    "warning-observation": "#F59E0B",
+                    "outline-variant": "#c3c6d5",
+                    "secondary": "#505f76",
+                    "on-primary-container": "#bcceff",
+                    "inverse-primary": "#b0c6ff",
+                    "primary-container": "#0f52ba",
+                    "surface-border": "#E2E8F0",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "gutter": "24px",
+                    "container-max": "1440px",
+                    "sidebar-width": "260px",
+                    "margin-mobile": "16px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "data-tabular": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "data-tabular": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Predicted SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-low border-r border-surface-border flex flex-col py-stack-md z-50">
+<div class="px-gutter mb-stack-lg">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">RehabOS</h1>
+<p class="font-label-bold text-label-bold text-secondary uppercase">Clinical ERP</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center px-gutter py-3 text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-label-bold text-label-bold">Dashboard</span>
+</a>
+<!-- Active Tab: Patients -->
+<a class="flex items-center px-gutter py-3 text-primary border-l-4 border-primary bg-secondary-container/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-bold text-label-bold">Patients</span>
+</a>
+<a class="flex items-center px-gutter py-3 text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">medical_services</span>
+<span class="font-label-bold text-label-bold">Medical</span>
+</a>
+<a class="flex items-center px-gutter py-3 text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">psychology</span>
+<span class="font-label-bold text-label-bold">Counseling</span>
+</a>
+<a class="flex items-center px-gutter py-3 text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">sanitizer</span>
+<span class="font-label-bold text-label-bold">Detox</span>
+</a>
+<a class="flex items-center px-gutter py-3 text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">domain</span>
+<span class="font-label-bold text-label-bold">Facility</span>
+</a>
+<a class="flex items-center px-gutter py-3 text-on-secondary-container hover:bg-surface-variant transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="font-label-bold text-label-bold">Reports</span>
+</a>
+</nav>
+<div class="mt-auto px-gutter flex flex-col gap-1 border-t border-surface-border pt-4">
+<a class="flex items-center py-2 text-on-secondary-container hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined mr-3">help</span>
+<span class="font-label-bold text-label-bold">Help Center</span>
+</a>
+<a class="flex items-center py-2 text-on-secondary-container hover:bg-surface-variant transition-all" href="#">
+<span class="material-symbols-outlined mr-3">logout</span>
+<span class="font-label-bold text-label-bold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen flex flex-col">
+<!-- Predicted TopNavBar -->
+<header class="w-full h-16 sticky top-0 z-40 bg-surface-container-lowest border-b border-surface-border flex justify-between items-center px-gutter">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-body-md">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-body-md focus:ring-2 focus:ring-primary/20 placeholder:text-outline transition-all" placeholder="Search patients, providers, or charts..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-secondary">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined text-secondary">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-surface-border mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Close-up professional portrait of a medical clinician in a clean, high-key studio environment. The clinician wears a white lab coat and a stethoscope, looking directly into the camera with an empathetic and professional expression. Soft clinical lighting highlights the textures of the uniform against a minimalist neutral grey background, representing the high-quality care of RehabOS." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv1iuPryE8uhES7T-WVzQ22cXw7hrgRdcqA-c09RyCc23w9QuUbDYLtlyM_sGkYoViK3ZaE2Y6y1QGXb13O8OyUactKn_gvD4Cn79WsvOH3sONPXZSCkB_fdweQfPW-NroVzISUn2e6BdRhe0e8xfMdJ9zPqI75Quv4vEHJtYRxi1Z4UpHhLjmGZ9Lf1FZISsqIiDb_apgqgP98ezCiMvECNsRsIsYmUeg7Ew-djNttkcIg1aivoRE"/>
+<span class="font-body-md text-body-md font-semibold text-primary">Dr. Julian Vance</span>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-gutter max-w-container-max mx-auto w-full">
+<!-- Summary Header Stats (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-md mb-stack-lg">
+<div class="bg-surface-container-lowest border border-surface-border p-stack-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary p-2 bg-primary-fixed rounded-lg">group</span>
+<span class="text-success-recovery font-label-bold text-label-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span> +3%
+                        </span>
+</div>
+<p class="text-secondary font-label-bold text-label-bold uppercase tracking-wider">Total Active</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">142</h2>
+</div>
+<div class="bg-surface-container-lowest border border-surface-border p-stack-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed rounded-lg">medical_services</span>
+</div>
+<p class="text-secondary font-label-bold text-label-bold uppercase tracking-wider">In Detox</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">18</h2>
+</div>
+<div class="bg-surface-container-lowest border border-surface-border p-stack-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-success-recovery p-2 bg-secondary-container rounded-lg">check_circle</span>
+</div>
+<p class="text-secondary font-label-bold text-label-bold uppercase tracking-wider">Stable/Ready</p>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">84</h2>
+</div>
+<div class="bg-surface-container-lowest border border-surface-border p-stack-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-critical-alert p-2 bg-error-container rounded-lg">warning</span>
+</div>
+<p class="text-secondary font-label-bold text-label-bold uppercase tracking-wider">High Risk</p>
+<h2 class="font-headline-lg text-headline-lg text-error">12</h2>
+</div>
+</div>
+<!-- Dashboard Controls -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-stack-md">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Patient Directory</h3>
+<p class="font-body-sm text-body-sm text-secondary">Manage and monitor all currently admitted clinical residents.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 border border-surface-border bg-surface-container-lowest text-on-secondary-container font-label-bold text-label-bold rounded-lg hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-body-md">filter_list</span>
+                        Filters
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-surface-border bg-surface-container-lowest text-on-secondary-container font-label-bold text-label-bold rounded-lg hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-body-md">file_download</span>
+                        Export List
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:bg-primary-container transition-all shadow-sm">
+<span class="material-symbols-outlined text-body-md">add</span>
+                        New Admission
+                    </button>
+</div>
+</div>
+<!-- Patient Table Container -->
+<div class="bg-surface-container-lowest border border-surface-border rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-border">
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase sticky left-0 bg-surface-container-low z-10">Patient Name / ID</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase">Age/Gender</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase">Admission</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase">Diagnosis</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase">Recovery Stage</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase">Provider</th>
+<th class="px-6 py-4 font-label-bold text-label-bold text-secondary uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-border">
+<!-- Table Row 1 -->
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 sticky left-0 bg-surface-container-lowest group-hover:bg-surface-bright z-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-bold text-xs">MA</div>
+<div>
+<p class="font-data-tabular text-data-tabular text-on-surface">Marcus Anderson</p>
+<p class="font-body-sm text-body-sm text-secondary">ID: 992-004-12</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">34 / M</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 12, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed text-on-tertiary-fixed-variant">Alcohol Use Disorder</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-critical-alert w-[15%]"></div>
+</div>
+<span class="font-label-bold text-[11px] text-critical-alert uppercase">Detox Phase</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Dr. Sarah Chen</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 sticky left-0 bg-surface-container-lowest group-hover:bg-surface-bright z-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center font-bold text-xs">EL</div>
+<div>
+<p class="font-data-tabular text-data-tabular text-on-surface">Elena Lopez</p>
+<p class="font-body-sm text-body-sm text-secondary">ID: 441-209-88</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">28 / F</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Sep 05, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-fixed text-on-secondary-fixed-variant">Opioid Recovery</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-success-recovery w-[75%]"></div>
+</div>
+<span class="font-label-bold text-[11px] text-success-recovery uppercase">Post-Care Prep</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Dr. Julian Vance</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 sticky left-0 bg-surface-container-lowest group-hover:bg-surface-bright z-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-patient-info text-on-primary flex items-center justify-center font-bold text-xs">JR</div>
+<div>
+<p class="font-data-tabular text-data-tabular text-on-surface">James Roland</p>
+<p class="font-body-sm text-body-sm text-secondary">ID: 228-910-33</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">45 / M</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Aug 22, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed text-on-tertiary-fixed-variant">Cocaine Relapse Prev</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-warning-observation w-[45%]"></div>
+</div>
+<span class="font-label-bold text-[11px] text-warning-observation uppercase">Counseling</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Dr. Sarah Chen</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 4 -->
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 sticky left-0 bg-surface-container-lowest group-hover:bg-surface-bright z-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-xs">SF</div>
+<div>
+<p class="font-data-tabular text-data-tabular text-on-surface">Sophia Franklin</p>
+<p class="font-body-sm text-body-sm text-secondary">ID: 887-112-99</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">22 / F</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Oct 19, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-tertiary-fixed text-on-tertiary-fixed-variant">Poly-Substance Use</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-critical-alert w-[8%]"></div>
+</div>
+<span class="font-label-bold text-[11px] text-critical-alert uppercase">Initial Intake</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Dr. Mark Strauss</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 5 -->
+<tr class="group hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 sticky left-0 bg-surface-container-lowest group-hover:bg-surface-bright z-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-primary flex items-center justify-center font-bold text-xs">KT</div>
+<div>
+<p class="font-data-tabular text-data-tabular text-on-surface">Kevin Taggart</p>
+<p class="font-body-sm text-body-sm text-secondary">ID: 312-556-44</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">51 / M</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">July 15, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-secondary-fixed text-on-secondary-fixed-variant">Alcohol Recovery</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-success-recovery w-[95%]"></div>
+</div>
+<span class="font-label-bold text-[11px] text-success-recovery uppercase">Stable</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">Dr. Julian Vance</td>
+<td class="px-6 py-4 text-right">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center border-t border-surface-border">
+<span class="font-body-sm text-body-sm text-secondary">Showing 5 of 142 patients</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 border border-surface-border bg-surface-container-lowest rounded hover:bg-surface-container transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="px-3 py-1 border border-primary bg-primary text-on-primary rounded text-xs font-bold">1</button>
+<button class="px-3 py-1 border border-surface-border bg-surface-container-lowest rounded text-xs hover:bg-surface-container">2</button>
+<button class="px-3 py-1 border border-surface-border bg-surface-container-lowest rounded text-xs hover:bg-surface-container">3</button>
+<span class="text-secondary mx-1">...</span>
+<button class="px-3 py-1 border border-surface-border bg-surface-container-lowest rounded text-xs hover:bg-surface-container">29</button>
+<button class="px-3 py-1 border border-surface-border bg-surface-container-lowest rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Dashboard Bottom Layout (Two Columns) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg mt-stack-lg">
+<!-- Recent Activity Feed -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-surface-border rounded-xl p-stack-md">
+<div class="flex justify-between items-center mb-4">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Recent Clinical Observations</h4>
+<button class="text-primary font-label-bold text-label-bold uppercase">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container transition-colors border border-transparent hover:border-surface-border">
+<div class="mt-1 w-10 h-10 rounded-full bg-patient-info/10 text-patient-info flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<div>
+<p class="text-body-md font-semibold text-on-surface">Physiological Update - <span class="text-primary">Marcus Anderson</span></p>
+<p class="text-body-sm text-secondary mt-1">Patient reports increased anxiety during night shifts. Vitals stable. Increased hydration protocol initiated.</p>
+<p class="text-label-bold text-outline text-[11px] mt-2 uppercase">2 Hours Ago • By RN David Miller</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container transition-colors border border-transparent hover:border-surface-border">
+<div class="mt-1 w-10 h-10 rounded-full bg-success-recovery/10 text-success-recovery flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<p class="text-body-md font-semibold text-on-surface">Recovery Stage Promotion - <span class="text-primary">Elena Lopez</span></p>
+<p class="text-body-sm text-secondary mt-1">Completed 30-day abstinence milestone. Transitioning to outpatient orientation phase.</p>
+<p class="text-label-bold text-outline text-[11px] mt-2 uppercase">5 Hours Ago • By Dr. Julian Vance</p>
+</div>
+</div>
+</div>
+</div>
+<!-- High Risk Watchlist Widget -->
+<div class="bg-surface-container-lowest border border-surface-border rounded-xl p-stack-md border-t-4 border-t-error">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Priority Watchlist</h4>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low border-l-2 border-error">
+<span class="font-body-sm text-on-surface font-semibold">Sophia Franklin</span>
+<span class="font-label-bold text-[10px] bg-error-container text-error px-2 py-0.5 rounded">INTAKE CRITICAL</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low border-l-2 border-warning-observation">
+<span class="font-body-sm text-on-surface font-semibold">Robert DeNiro</span>
+<span class="font-label-bold text-[10px] bg-tertiary-fixed text-on-tertiary px-2 py-0.5 rounded">VITALS WARNING</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low border-l-2 border-error">
+<span class="font-body-sm text-on-surface font-semibold">Mila Kunis</span>
+<span class="font-label-bold text-[10px] bg-error-container text-error px-2 py-0.5 rounded">DETOX PEAK</span>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-surface-border rounded-lg text-body-sm text-secondary font-semibold hover:bg-surface-container transition-colors">
+                        Manage Watchlist
+                    </button>
+</div>
+</div>
+</div>
+<!-- Sticky FAB for Quick Actions -->
+<button class="fixed bottom-gutter right-gutter w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95 group z-50">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform">add</span>
+<div class="absolute right-16 bg-on-surface text-on-primary px-3 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                Add Patient
+            </div>
+</button>
+</main>
+<script>
+        // Micro-interactions for table highlighting
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.querySelector('.material-symbols-outlined')?.classList.add('text-primary');
+            });
+            row.addEventListener('mouseleave', () => {
+                row.querySelector('.material-symbols-outlined')?.classList.remove('text-primary');
+            });
+        });
+
+        // Simple dashboard data refresh simulation
+        window.addEventListener('load', () => {
+            console.log('Clinical ERP Dashboard Initialized.');
+        });
+    </script>
+</body></html>
