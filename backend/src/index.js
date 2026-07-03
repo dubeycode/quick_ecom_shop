@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const app = require('./app');
 const connectDB = require('./config/db');
@@ -15,6 +16,6 @@ async function start() {
 }
 
 start().catch((err) => {
-  console.error('Failed to start server:', err);
+  console.error('Failed to start server:', err.message || err);
   process.exit(1);
 });

@@ -27,5 +27,6 @@ const orderSchema = new mongoose.Schema(
 orderSchema.index({ orderStatus: 1, createdAt: -1 });
 orderSchema.index({ phone: 1, createdAt: -1 });
 orderSchema.index({ orderStatus: 1, updatedAt: 1 });
+orderSchema.index({ providerId: 1, orderStatus: 1 });
 
 module.exports = mongoose.model('Order', orderSchema);

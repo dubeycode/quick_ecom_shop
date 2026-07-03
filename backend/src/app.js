@@ -3,6 +3,7 @@ const cors = require('cors');
 const userOrdersRouter = require('./routes/user/orders');
 const adminRouter = require('./routes/admin');
 const schedulerRouter = require('./routes/scheduler');
+const providerRouter = require('./routes/provider');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -17,6 +18,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/v1/user/orders', userOrdersRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/scheduler', schedulerRouter);
+app.use('/api/v1/provider', providerRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });

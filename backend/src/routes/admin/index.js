@@ -9,12 +9,20 @@ const {
   updateOrderStatus,
   triggerScheduler,
 } = require('../../controllers/admin/adminController');
+const {
+  createProvider,
+  listProviders,
+  assignOrder,
+} = require('../../controllers/admin/providerController');
 
 const router = express.Router();
 
 router.use(adminAuth);
 
 router.get('/orders', listOrders);
+router.get('/providers', listProviders);
+router.post('/providers', createProvider);
+router.post('/orders/:orderId/assign', assignOrder);
 router.get('/stats', getStats);
 router.get('/scheduler-logs', getSchedulerLogs);
 router.post('/scheduler/run', triggerScheduler);
